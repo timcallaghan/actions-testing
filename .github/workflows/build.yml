@@ -1,0 +1,31 @@
+name: Testing GitHub Actions
+
+on:
+  push:
+    branches:
+      - prerelease
+      - master
+  
+  pull_request:
+    branches:
+      - prerelease
+      - master
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            buildable:
+              - 'code/**'
+              - 'deploy/**'
+    
+      - name: Report build filter status
+        run: echo "The filter path status is ${{steps.filter.outputs.buildable}}"
+
